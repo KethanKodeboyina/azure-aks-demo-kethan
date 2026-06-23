@@ -16,8 +16,10 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+pool:
+  name: 'Release Pool'   # 👈 Your self-hosted pool name
+  demands:
+  - DockerBuild 
 
 stages:
 - stage: Build
@@ -26,7 +28,9 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: $(vmImageName)
+      name: 'Release Pool'   # 👈 Your self-hosted pool name
+      demands:
+      - DockerBuild 
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
